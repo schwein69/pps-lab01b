@@ -1,54 +1,52 @@
-## Exercise 2 Description
+# Exercise 2 Description
+Consider the above [program](#program-description),
+ which is already working ([`Main`](./Main.java) should launch the described program)
+ and is implemented with a GUI class
+ and interface/implementation for the logic.
+ The purpose of the exercise is to refactor only the **logic** part of the project
+ (not the GUI, do not focus on it!) to improve its quality and achieve good testing of its various parts.
 
-The goal of this exercise is to create a GUI with the appearance shown in following image:
-![f1](https://user-images.githubusercontent.com/23448811/222984113-3ff8708f-1478-447b-9d79-f35b6ce6bc2c.png)
-Particularly, it implements a clone of the game Minesweeper -- see [https://minesweeper.online/en/](https://minesweeper.online/en/) for a recap of the game.
+We propose the following TDD approach (but you can adapt it):
 
-You should implement the game, as follows:
-- Initially, distribute a specified number of mines at random locations, as determined by the second parameter of the GUI constructor.
-- Clicking on a cell containing a mine ends the game by showing the positions of the mines
-- Clicking on a cell that does NOT contain a mine disables the cell and shows the number of mines in immediate adjacency
-  (i.e., in one of the 8 adjacent cells: horizontally, vertically or diagonally)
-- If a cell without adjacent mines is clicked,
-  all adjacent cells should be "auto-clicked" recursively
-  (note that the previous figure shows what happens with an initial click on cell 0,0 in the upper left corner)
-- If all cells except the mines are disabled, the application should display a victory message:
+## Step 1: Seal ```LogicsImpl``` logic
+1. Write some tests that pass on `Logics`/`LogicsImpl` and that capture the core of the logic's functionality
+2. Implement any small additions to `Logics`/`LogicsImpl` needed to do so (e.g., additional constructors?)
+3. Do not improve `Logics`/`LogicsImpl` at this point; we will do so later
+4. Verify the system's functionality again
 
-![final](https://user-images.githubusercontent.com/23448811/222984332-0f60a4c4-c825-4f89-8692-19acb74ad20e.png)
+## Step 2: Refactor to improve design
+1. Consider an aspect of `LogicsImpl`'s implementation that can be externalized from `LogicsImpl` (SRP), i.e., inserted into a new class which `LogicsImpl` will be composed of
+2. Build the interface and its implementation of this new class with TDD, i.e.,
+   with various red-green-refactor steps on the new class
+3. Have `LogicsImpl` use this new class
+4. Re-run the tests for `LogicsImpl` and also perform manual testing on the GUI
 
-A starting codebase is provided,
- that is a minimal GUI already set up to intercept and manage events ([`Main`](./Main.java) it is the entrypoint of the application).
+Repeat these steps until `LogicsImpl` has been significantly reduced.
 
- The goal of this task is to define the methods of the `Logics` interface
- and implement it with a `LogicsImpl` class so that the game works.
-General quality objectives and specific ones, as indicated below,
- may lead to additional classes/interfaces of which `LogicsImpl` is composed of or uses.
+## Step 3: Final refinements
+At this point:
+1. Use TDD to improve what remains of `LogicsImpl`
+2. Create a UML diagram of the resulting system
 
-**DISCLAIMER**: there is a solution with a single `LogicsImpl` class of 80 lines
- (but you should do better!! :) ).
+# Program Description
+The goal of this exercise is to create
+a GUI with the appearance shown in the provided image:
 
-It is imperative to employ flawless TDD practices.
- Estimated time for the student: 2 to 3 hours.
+![](https://user-images.githubusercontent.com/23448811/222983821-6b32db03-87fc-4bb6-9760-2e67c2f3f588.png)
 
-Finding intermediate and incremental development stages is key! A possible sequence is the following:
-1) randomly place the mines
-2) at the first click immediately show that the game is lost, displaying the mines
-3) if someone clicks on a mine, immediately show that the game is lost by displaying the mines, otherwise allow re-click
-4) if someone clicks and does not take the mine, disable the cell
-5) if someone clicks and does not take the mine, disable the cell, but also show how many adjacent mines there are
-6) if someone clicks and does not take the mine, and there are no adjacent mines, proceed with the auto-clicks
-7) manage the flag placement with right-click on a cell as in the original game
+it contains a chess-like square grid of buttons (5x5),
+in which a pawn indicated with "*" and a knight indicated with "K"
+are both randomly positioned at the start.
 
-Note that the above objectives are not for the single red-green-refactor cycle,
- which is generally much shorter.
+Pressing a button will move the knight to that position,
+and this will work according to the rules of chess,
+where knights only move with a unique movement of 2 squares
+in one direction and 1 in the perpendicular direction.
 
-As quality objectives, take inspiration from the following:
-1) Strive for quality in logic, not so much in GUI - this is not a general rule, it's just for today's task
-1) Try not to violate DRY!
-2) If a method is not entirely clear and simple, find a different organization, perhaps by breaking it down into multiple methods
-3) If a class violates SRP, divide it into multiple classes (perhaps using patterns such as *Proxy*, *Template Method*, *Strategy*, or mere composition)
-4) Do not suffer from "primitive obsession": trying NOT to abuse booleans, integers, and strings. Use ad-hoc types instead!
-
-Architectural suggestions:
-1) Model the position of a cell with a `Cell` interface/class, capturing the concepts of adjacency
-2) Model the grid with a `Grid` interface/class
+Considering the figure,
+where the knight is in 0-based position (4,3), i.e.,
+the fourth column and the third row, for example,
+it could only move to 3 squares,
+i.e., (3,1) by capturing the pawn, (2,2) and (2,4).
+Clicking on an invalid position should not do anything.
+When the knight lands on the pawn, the application should be closed.

@@ -1,52 +1,48 @@
 # Exercise 1 Description
-Consider the above [program](#program-description),
- which is already working ([`Main`](./Main.java) should launch the described program)
- and is implemented with a GUI class
- and interface/implementation for the logic.
- The purpose of the exercise is to refactor only the **logic** part of the project
- (not the GUI, do not focus on it!) to improve its quality and achieve good testing of its various parts.
 
-We propose the following TDD approach (but you can adapt it):
+## Overview
+In this exercise, you will practice Test-Driven Development (TDD) while refactoring a simple bank account system (seen in class) to make it more flexible and open to future changes.
 
-## Step 1: Seal ```LogicsImpl``` logic
-1. Write some tests that pass on `Logics`/`LogicsImpl` and that capture the core of the logic's functionality
-2. Implement any small additions to `Logics`/`LogicsImpl` needed to do so (e.g., additional constructors?)
-3. Do not improve `Logics`/`LogicsImpl` at this point; we will do so later
-4. Verify the system's functionality again
+## Starting Code
+You are given two classes:
+- `BankAccount`: A public-facing account that enforces withdrawal rules and adds a transaction fee
+- `CoreBankAccount`: An internal class that handles the basic account operations
 
-## Step 2: Refactor to improve design
-1. Consider an aspect of `LogicsImpl`'s implementation that can be externalized from `LogicsImpl` (SRP), i.e., inserted into a new class which `LogicsImpl` will be composed of
-2. Build the interface and its implementation of this new class with TDD, i.e.,
-   with various red-green-refactor steps on the new class
-3. Have `LogicsImpl` use this new class
-4. Re-run the tests for `LogicsImpl` and also perform manual testing on the GUI
+The current implementation has the following limitations:
+1. The withdrawal fee calculation is hardcoded (always 1 unit)
+2. The withdrawal policy is inflexible (cannot withdraw more than the available balance)
+3. The system cannot easily support different types of accounts with varying policies
 
-Repeat these steps until `LogicsImpl` has been significantly reduced.
+## Exercise Goals
+Your task is to refactor the code following the "Anticipation of Change" principle to make it easier to:
+1. Modify the fee calculation logic independently
+2. Change the withdrawal policy separately
+3. Support multiple account types with different behaviors
 
-## Step 3: Final refinements
-At this point:
-1. Use TDD to improve what remains of `LogicsImpl`
-2. Create a UML diagram of the resulting system
+## Requirements
 
-# Program Description
-The goal of this exercise is to create
-a GUI with the appearance shown in the provided image:
+### Part 1: Initial Refactoring
+1. Rename the existing `BankAccount` class to `SilverBankAccount`
+2. Create a common `BankAccount` interface that defines the public API
+3. Modify `SilverBankAccount` to implement this interface
+4. Replace the hardcoded dependency on `CoreBankAccount` with dependency injection
 
-![](https://user-images.githubusercontent.com/23448811/222983821-6b32db03-87fc-4bb6-9760-2e67c2f3f588.png)
+### Part 2: New Account Types
+Create two additional account types:
+1. **Gold Account**:
+    - No transaction fee (fee = 0)
+    - Allows overdraft up to 500 units (can have negative balance up to -500)
 
-it contains a chess-like square grid of buttons (5x5),
-in which a pawn indicated with "*" and a knight indicated with "K"
-are both randomly positioned at the start.
+2. **Bronze Account**:
+    - Conditional fee: if withdrawal amount < 100, fee = 0; otherwise fee = 1
+    - No overdraft allowed (balance must always be >= 0)
 
-Pressing a button will move the knight to that position,
-and this will work according to the rules of chess,
-where knights only move with a unique movement of 2 squares
-in one direction and 1 in the perpendicular direction.
+## Suggested Implementation Steps (follow a TDD approach)
+1. Write tests for the `BankAccount` interface
+2. Rename `BankAccount` to `SilverBankAccount` and make it implement the interface
+3. Create a constructor in `SilverBankAccount` that accepts a `CoreBankAccount`
+4. Write tests for the fee calculation and withdrawal policy
+5. Create a `SilverBankAccount2` class to handle the fee calculation
+6. Extract interfaces or classes for the fee calculation and withdrawal policy
+7. Implement and test the Gold and Bronze account types
 
-Considering the figure,
-where the knight is in 0-based position (4,3), i.e.,
-the fourth column and the third row, for example,
-it could only move to 3 squares,
-i.e., (3,1) by capturing the pawn, (2,2) and (2,4).
-Clicking on an invalid position should not do anything.
-When the knight lands on the pawn, the application should be closed.
