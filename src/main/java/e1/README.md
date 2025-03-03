@@ -36,13 +36,3 @@ Create two additional account types:
 2. **Bronze Account**:
     - Conditional fee: if withdrawal amount < 100, fee = 0; otherwise fee = 1
     - No overdraft allowed (balance must always be >= 0)
-
-## Suggested Implementation Steps (follow a TDD approach)
-1. Write tests for the `BankAccount` interface
-2. Rename `BankAccount` to `SilverBankAccount` and make it implement the interface
-3. Create a constructor in `SilverBankAccount` that accepts a `CoreBankAccount`
-4. Write tests for the fee calculation and withdrawal policy
-5. Create a `SilverBankAccount2` class to handle the fee calculation
-6. Extract interfaces or classes for the fee calculation and withdrawal policy
-7. Implement and test the Gold and Bronze account types
-
