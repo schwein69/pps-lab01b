@@ -1,15 +1,18 @@
 package e1;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BronzeBankAccountTest extends AbstractBankAccountTest{
+public class BronzeBankAccountTest extends AbstractBankAccountTest {
     @Override
     protected BankAccount createBankAccount() {
         return new BronzeBankAccount(new CoreBankAccount());
     }
 
     @Override
+    @Test
     protected void testCanWithdraw() {
         this.account.deposit(1000);
         this.account.withdraw(50);
@@ -19,8 +22,9 @@ public class BronzeBankAccountTest extends AbstractBankAccountTest{
     }
 
     @Override
+    @Test
     protected void testCannotWithdrawMoreThanAvailable() {
         this.account.deposit(1000);
-        assertThrows(IllegalStateException.class,()->this.account.withdraw(1200));
+        assertThrows(IllegalStateException.class, () -> this.account.withdraw(1200));
     }
 }

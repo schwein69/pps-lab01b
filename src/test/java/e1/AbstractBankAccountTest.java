@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class AbstractBankAccountTest {
     protected BankAccount account;
@@ -27,9 +26,7 @@ public abstract class AbstractBankAccountTest {
         assertEquals(1000, this.account.getBalance());
     }
 
-    @Test
     protected abstract void testCanWithdraw();
 
-    @Test
     protected abstract void testCannotWithdrawMoreThanAvailable();
 }
