@@ -17,7 +17,7 @@ public class LogicTest {
 
     @BeforeEach
     public void init() {
-        this.logics = new LogicsImpl(SIZE, new PositionGeneratorImpl());
+        this.logics = new KnightLogicsImpl(SIZE, new PositionGeneratorImpl());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class LogicTest {
 
     @Test
     void testKnightCapturesPawn() {
-        Logics customLogics = new LogicsImpl(SIZE, new Pair<>(2, 2), new Pair<>(4, 3));
+        Logics customLogics = new KnightLogicsImpl(SIZE, new Pair<>(2, 2), new Pair<>(4, 3));
         assertTrue(customLogics.hit(4, 3));
     }
 

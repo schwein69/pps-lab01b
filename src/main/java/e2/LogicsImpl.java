@@ -4,8 +4,8 @@ import java.util.*;
 
 public abstract class LogicsImpl implements Logics {
 
-    private final Pair<Integer, Integer> pawn;
-    private Pair<Integer, Integer> knight;
+    protected final Pair<Integer, Integer> pawn;
+    protected Pair<Integer, Integer> knight;
     private final int size;
     private final PositionGenerator positionGenerator;
 
@@ -41,14 +41,6 @@ public abstract class LogicsImpl implements Logics {
             return this.pawn.equals(this.knight);
         }
         return false;
-        // Below a compact way to express allowed moves for the knight
-       /* int x = row - this.knight.getX();
-        int y = col - this.knight.getY();
-        if (x != 0 && y != 0 && Math.abs(x) + Math.abs(y) == 3) {
-            this.knight = new Pair<>(row, col);
-            return this.pawn.equals(this.knight);
-        }
-        return false;*/
     }
 
     @Override
