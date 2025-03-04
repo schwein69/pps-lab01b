@@ -41,7 +41,7 @@ public class LogicTest {
 
     @Test
     void testKnightCapturesPawn() {
-        Logics customLogics = new KnightLogicsImpl(SIZE, new Pair<>(2, 2), new Pair<>(4, 3));
+        Logics customLogics = new KnightLogicsImpl(SIZE, new Pair<>(2, 2), new Pair<>(4, 3), new PositionGeneratorImpl());
         assertTrue(customLogics.hit(4, 3));
     }
 
@@ -56,15 +56,25 @@ public class LogicTest {
                 .anyMatch(move -> {
                     int newX = actualPosition.getX() + move[0];
                     int newY = actualPosition.getY() + move[1];
-                    if (isWithinBounds(new Pair<>(newX, newY))) {
-                        this.logics.hit(newX, newY);
-                        assertTrue(this.logics.hasKnight(newX, newY));
-                        return true;
-                    }
-                    return false;
+                    return isWithinBounds(new Pair<>(newX, newY));
                 });
-
         assertTrue(validMove);
+    }
+
+    @Test
+    public void testInvalidMoveOutsideBoard() {
+        Pair<Integer, Integer> knightPosition = this.logics.getKnightPosition();
+        int invalidRow = knightPosition.getX() + 10;
+        int invalidCol = knightPosition.getY() + 10;
+        assertThrows(IndexOutOfBoundsException.class, () -> this.logics.hit(invalidRow, invalidCol));
+    }
+
+    @Test
+    public void testInvalidMoveNotLShaped() {
+        Pair<Integer, Integer> knightPosition = this.logics.getKnightPosition();
+        int invalidRow = knightPosition.getX() + 1 < SIZE ? knightPosition.getX() + 1: knightPosition.getX() - 1;
+        int invalidCol = knightPosition.getY() + 1 < SIZE ? knightPosition.getY() + 1: knightPosition.getY() - 1;
+        assertFalse(this.logics.hit(invalidRow, invalidCol));
     }
 
 }

@@ -4,25 +4,25 @@ import java.util.*;
 
 public abstract class LogicsImpl implements Logics {
 
-    protected final Pair<Integer, Integer> pawn;
-    protected Pair<Integer, Integer> knight;
+    private final Pair<Integer, Integer> pawn;
+    private Pair<Integer, Integer> knight;
     private final int size;
     private final PositionGenerator positionGenerator;
 
     public LogicsImpl(int size, PositionGenerator positionGenerator) {
         this.size = size;
         this.positionGenerator = positionGenerator;
-        HashSet<Pair<Integer,Integer>> hashSet = new HashSet<>();
-        this.pawn = this.positionGenerator.generateRandomPosition(size,hashSet);
+        HashSet<Pair<Integer, Integer>> hashSet = new HashSet<>();
+        this.pawn = this.positionGenerator.generateRandomPosition(size, hashSet);
         hashSet.add(this.pawn);
-        this.knight = this.positionGenerator.generateRandomPosition(size,hashSet);
+        this.knight = this.positionGenerator.generateRandomPosition(size, hashSet);
     }
 
-    public LogicsImpl(int size, Pair<Integer, Integer> knightPair, Pair<Integer, Integer> pawnPair) {
+    public LogicsImpl(int size, Pair<Integer, Integer> knightPair, Pair<Integer, Integer> pawnPair, PositionGenerator positionGenerator) {
         this.size = size;
         this.knight = knightPair;
         this.pawn = pawnPair;
-        this.positionGenerator = new PositionGeneratorImpl();
+        this.positionGenerator = positionGenerator;
     }
 
     private void validatePosition(int row, int col) {
@@ -35,8 +35,8 @@ public abstract class LogicsImpl implements Logics {
 
     @Override
     public boolean hit(int row, int col) {
-        validatePosition(row,col);
-        if (isValidMove(row,col)){
+        validatePosition(row, col);
+        if (isValidMove(row, col)) {
             this.knight = new Pair<>(row, col);
             return this.pawn.equals(this.knight);
         }
