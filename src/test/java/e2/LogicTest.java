@@ -17,7 +17,7 @@ public class LogicTest {
 
     @BeforeEach
     public void init() {
-        this.logics = new LogicsImpl(SIZE);
+        this.logics = new LogicsImpl(SIZE, new PositionGeneratorImpl());
     }
 
     @Test

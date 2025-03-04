@@ -2,44 +2,53 @@ package e2;
 
 import java.util.*;
 
-public class LogicsImpl implements Logics {
+public abstract class LogicsImpl implements Logics {
 
     private final Pair<Integer, Integer> pawn;
     private Pair<Integer, Integer> knight;
-    private final Random random = new Random();
     private final int size;
+    private final PositionGenerator positionGenerator;
 
-    public LogicsImpl(int size) {
+    public LogicsImpl(int size, PositionGenerator positionGenerator) {
         this.size = size;
-        this.pawn = this.randomEmptyPosition();
-        this.knight = this.randomEmptyPosition();
+        this.positionGenerator = positionGenerator;
+        HashSet<Pair<Integer,Integer>> hashSet = new HashSet<>();
+        this.pawn = this.positionGenerator.generateRandomPosition(size,hashSet);
+        hashSet.add(this.pawn);
+        this.knight = this.positionGenerator.generateRandomPosition(size,hashSet);
     }
 
     public LogicsImpl(int size, Pair<Integer, Integer> knightPair, Pair<Integer, Integer> pawnPair) {
         this.size = size;
         this.knight = knightPair;
         this.pawn = pawnPair;
+        this.positionGenerator = new PositionGeneratorImpl();
     }
 
-    private final Pair<Integer, Integer> randomEmptyPosition() {
-        Pair<Integer, Integer> pos = new Pair<>(this.random.nextInt(size), this.random.nextInt(size));
-        // the recursive call below prevents clash with an existing pawn
-        return this.pawn != null && this.pawn.equals(pos) ? randomEmptyPosition() : pos;
-    }
-
-    @Override
-    public boolean hit(int row, int col) {
+    private void validatePosition(int row, int col) {
         if (row < 0 || col < 0 || row >= this.size || col >= this.size) {
             throw new IndexOutOfBoundsException();
         }
+    }
+
+    protected abstract boolean isValidMove(int row, int col);
+
+    @Override
+    public boolean hit(int row, int col) {
+        validatePosition(row,col);
+        if (isValidMove(row,col)){
+            this.knight = new Pair<>(row, col);
+            return this.pawn.equals(this.knight);
+        }
+        return false;
         // Below a compact way to express allowed moves for the knight
-        int x = row - this.knight.getX();
+       /* int x = row - this.knight.getX();
         int y = col - this.knight.getY();
         if (x != 0 && y != 0 && Math.abs(x) + Math.abs(y) == 3) {
             this.knight = new Pair<>(row, col);
             return this.pawn.equals(this.knight);
         }
-        return false;
+        return false;*/
     }
 
     @Override
