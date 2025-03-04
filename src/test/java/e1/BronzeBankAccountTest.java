@@ -14,7 +14,7 @@ public class BronzeBankAccountTest extends AbstractBankAccountTest {
     @Override
     @Test
     protected void testCanWithdraw() {
-        this.account.deposit(1000);
+        this.account.deposit(INITIAL_DEPOSIT);
         this.account.withdraw(50);
         assertEquals(950, this.account.getBalance());
         this.account.withdraw(100);
@@ -24,7 +24,7 @@ public class BronzeBankAccountTest extends AbstractBankAccountTest {
     @Override
     @Test
     protected void testCannotWithdrawMoreThanAvailable() {
-        this.account.deposit(1000);
+        this.account.deposit(INITIAL_DEPOSIT);
         assertThrows(IllegalStateException.class, () -> this.account.withdraw(1200));
     }
 }

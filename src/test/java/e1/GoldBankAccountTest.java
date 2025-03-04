@@ -13,7 +13,7 @@ public class GoldBankAccountTest extends AbstractBankAccountTest {
     @Override
     @Test
     public void testCanWithdraw() {
-        this.account.deposit(1000);
+        this.account.deposit(INITIAL_DEPOSIT);
         this.account.withdraw(200);
         assertEquals(800, this.account.getBalance());
     }
@@ -21,7 +21,7 @@ public class GoldBankAccountTest extends AbstractBankAccountTest {
     @Override
     @Test
     public void testCannotWithdrawMoreThanAvailable() {
-        this.account.deposit(1000);
+        this.account.deposit(INITIAL_DEPOSIT);
         assertDoesNotThrow(() -> this.account.withdraw(1500));
         assertEquals(-500, this.account.getBalance());
     }
