@@ -15,4 +15,13 @@ public class KnightLogicsImpl extends LogicsImpl {
         int y = col - getKnightPosition().getY();
         return x != 0 && y != 0 && Math.abs(x) + Math.abs(y) == 3;
     }
+
+    @Override
+    protected boolean uniqueHit(int row, int col) {
+        if (isValidMove(row, col)) {
+            this.chessBoard.setKnightPosition(new Pair<>(row, col));
+            return this.chessBoard.getPawnPosition().equals(this.chessBoard.getKnightPosition());
+        }
+        return false;
+    }
 }

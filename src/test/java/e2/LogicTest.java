@@ -43,6 +43,7 @@ public class LogicTest {
     void testKnightCapturesPawn() {
         Logics customLogics = new KnightLogicsImpl(SIZE, new Pair<>(2, 2), new Pair<>(4, 3), new PositionGeneratorImpl());
         assertTrue(customLogics.hit(4, 3));
+        assertFalse(customLogics.hit(3, 4));
     }
 
     @Test
@@ -72,8 +73,8 @@ public class LogicTest {
     @Test
     public void testInvalidMoveNotLShaped() {
         Pair<Integer, Integer> knightPosition = this.logics.getKnightPosition();
-        int invalidRow = knightPosition.getX() + 1 < SIZE ? knightPosition.getX() + 1: knightPosition.getX() - 1;
-        int invalidCol = knightPosition.getY() + 1 < SIZE ? knightPosition.getY() + 1: knightPosition.getY() - 1;
+        int invalidRow = knightPosition.getX() + 1 < SIZE ? knightPosition.getX() + 1 : knightPosition.getX() - 1;
+        int invalidCol = knightPosition.getY() + 1 < SIZE ? knightPosition.getY() + 1 : knightPosition.getY() - 1;
         assertFalse(this.logics.hit(invalidRow, invalidCol));
     }
 

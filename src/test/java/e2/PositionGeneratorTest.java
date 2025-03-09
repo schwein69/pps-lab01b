@@ -3,8 +3,6 @@ package e2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,27 +11,22 @@ public class PositionGeneratorTest {
     private static final int SIZE = 5;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         this.positionGenerator = new PositionGeneratorImpl();
     }
 
     @Test
-    public void testGenerateRandomPosition(){
-        HashSet<Pair<Integer, Integer>> excludedPositions = new HashSet<>();
-        excludedPositions.add(new Pair<>(0, 0));
-        Pair<Integer, Integer> pos = positionGenerator.generateRandomPosition(SIZE, excludedPositions);
+    public void testGenerateRandomPosition() {
+        Pair<Integer, Integer> pos = positionGenerator.generateRandomPosition(SIZE, new Pair<>(0, 0));
         assertNotNull(pos);
-        assertTrue(pos.getX() >= 0 && pos.getX() < SIZE);
-        assertTrue(pos.getY() >= 0 && pos.getY() < SIZE);
-        assertFalse(excludedPositions.contains(pos));
+        assertTrue(pos.getX() >= 0 && pos.getX() < SIZE && pos.getY() >= 0 && pos.getY() < SIZE);
+        assertNotEquals(new Pair<>(0, 0), pos);
     }
 
     @Test
     void testGenerateRandomPositionWithAllExcluded() {
-        Set<Pair<Integer, Integer>> excludedPositions = new HashSet<>();
-        excludedPositions.add(new Pair<>(0, 0)); // Exclude the only possible position
         assertThrows(IllegalStateException.class, () -> {
-            positionGenerator.generateRandomPosition(1, excludedPositions);
+            positionGenerator.generateRandomPosition(1, new Pair<>(0, 0));
         });
     }
 }
